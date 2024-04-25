@@ -1,0 +1,59 @@
+﻿@page "/CreatePersonas"
+@using Registro_personas.Models
+@using Registro_personas.Services
+@using System.Runtime.ConstrainedExecution
+@rendermode InteractiveServer
+@inject PersonasService personasService
+@inject NavigationManager navigation
+
+<PageTitle>Crear Nueva Persona</PageTitle>
+<EditForm Model="persona" OnValidSubmit="Crear">
+    <DataAnnotationsValidator>
+        <div class="container">
+            <div class="card shadow-lg">
+                @*HEADER*@
+                <div class="card-header">
+                    <h1><strong>Crear nueva persona</strong></h1>
+                </div>
+                @*Body*@
+                <div class="card-body">
+                    @*Id*@
+                    <label class="form-label" for="id"><strong>PersonasId</strong></label>
+                    <InputNumber id="nombre" class="form-control" @bind-Value="persona.PersonaId"></InputNumber>
+
+                    @*Nombre*@
+                    <label class="form-label" for="nombre"><strong>Nombre</strong></label>
+                    <InputText id="nombre" class="form-control" @bind-Value="persona.Nombre"></InputText>
+                    <ValidationMessage For="@(() => persona.Nombre)"></ValidationMessage>
+
+                    @*Apellido*@
+                    <label class="form-label" for="apellido"><strong>Apellido</strong></label>
+                    <InputText id="apellido" class="form-control" @bind-Value="persona.Apellido"></InputText>
+                    <ValidationMessage For="@(() => persona.Apellido)"></ValidationMessage>
+
+                    @*Edad*@
+                    <label class="form-label" for="edad"><strong>Edad</strong></label>
+                    <InputNumber id="edad" class="form-control" @bind-Value="persona.Edad"></InputNumber>
+                </div>
+                @*Footer*@
+                <div class="card-footer">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="Volver"></button>
+                    <button type="submit" class="btn btn-outline-success">Crear</button>
+                </div>
+            </div>
+        </div>
+    </DataAnnotationsValidator>
+</EditForm>
+@code {
+    public Personas persona { get; set; } = new Personas();
+
+    public async Task Crear()
+    {
+        await personasService.Crear(persona);
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Personas");
+    }
+}

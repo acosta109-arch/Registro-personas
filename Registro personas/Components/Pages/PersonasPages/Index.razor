@@ -1,0 +1,63 @@
+﻿@page "/Personas"
+@using Registro_personas.Models
+@using Registro_personas.Services
+@rendermode InteractiveServer
+@inject PersonasService personasService
+@inject NavigationManager navigation
+
+<PageTitle>Personas</PageTitle>
+<div> class="container">
+    <div class=" card shadow-lg">
+        @*Header*@
+        <div class="card-header">
+            <h1><strong>Personas</strong></h1>
+            <button type="button" class=" btn btn-outline-primary" @onclick="IrACrear">Crear</button>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>PersonasId</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Edad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var persona in personas)
+                    {
+                        <tr>
+                            <th>@persona.PersonaId</th>
+                            <th>@persona.Nombre</th>
+                            <th>@persona.Apellido</th>
+                            <th>@persona.Edad</th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Total de personas:</strong>@personas.Count</p>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    public List<Personas> personas = new List<Personas>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        personas = await personasService.Listar(p => p.PersonaId > 0);
+    }
+
+
+    public void IrACrear()
+    {
+        navigation.NavigateTo("/CreatePersonas");
+    }
+}
